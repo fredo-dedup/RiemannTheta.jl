@@ -33,6 +33,30 @@ _find_int_points_python(g, R, T, c, radix)
 @btime find_int_points($g, $R, $(Matrix(T))) # 50.5 ms
 @btime find_int_points($g, $R, $(T)) # 54.6 ms
 
+
+T = Matrix(chol(imag.(Ω)))
+n = size(T,1)
+T, Rₒ, c, ns, i, nss = T, 4.5 / sqrt(π), zeros(n), Vector{Float64}(n), n, Vector{Float64}[]
+@btime allrang($T, $Rₒ, $c, $ns, $i, $nss) # 6.3 μs
+@time allrang(T, Rₒ, c, ns, i, nss) # 40 μs
+
+allrang4(T, 4.5)
+@btime allrang4($T, 4.5) # 4.7 μs
+
+
+it = InteriorPointIterator(4.5, T)
+@btime collect($it) # 118μs
+
+n = 5
+T = (tmp = rand(n,n)-0.5 ; Matrix(chol(tmp*tmp')))
+Rₒ, c, ns = 5. / sqrt(π), zeros(n), Vector{Float64}(n), n
+@time allrang(T, Rₒ, zeros(n), Vector{Float64}(n), n, Vector{Float64}[])
+@btime allrang($T, $Rₒ, $c, $ns, $n, $(Vector{Float64}[])) # 12.4ms (37461 points)
+@btime allrang4($T, 5.) # 7.2ms (37461 points)
+
+
+
+
 ########### finite_sum.jl ##############
 
 rV = 10*rand(5)

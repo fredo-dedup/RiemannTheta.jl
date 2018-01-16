@@ -81,6 +81,13 @@ clipboard(ns)
 [1.0, 2.0]]
 
 
+using DataVoyager
+using NamedTuples
+Voyager([  @NT(x=el[1], y=el[2]) for el in res ])
+
+clipboard(res)
+
+
 
 ############## lll_reduce.jl  ###############
 b = rand(5,5)
