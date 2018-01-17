@@ -29,11 +29,10 @@ accuracy_radius = 5.
 Ω = [ 1.690983006 + 0.9510565162im 1.5+0.363271264im ;
       1.5+0.363271264im 1.309016994+0.9510565162im ]
 
-
 T = Matrix(chol(imag.(Ω)))
-n = size(Ω,1)
-ns = Vector{Float64}[]
-allrang(T, 4.5 / sqrt(π), zeros(n), Vector{Float64}(n), n)
+R = radius(T, 1e-3)
+innerpoints(T, R)
+
 ns
 clipboard(ns)
 [-2.0, 2.0],
@@ -80,6 +79,13 @@ clipboard(ns)
 [0.0, 2.0],
 [1.0, 2.0]]
 
+
+Ω = -1/(2π * im) * [ 111.207 96.616 ; 96.616 83.943 ]
+T = Matrix(chol(imag.(Ω)))
+R = radius(T, 1e-3)
+res = innerpoints(T, R)
+
+res = innerpoints(Matrix(chol(imag.(Ω))), 1.)
 
 using DataVoyager
 using NamedTuples

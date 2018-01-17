@@ -21,7 +21,7 @@ Returns
 -------
 - The LLL reduction of the vectors in `b₀`
 """
-function lll(b₀::Vector{Vector{Float64}})::AbstractMatrix{Float64}
+function lll(b₀::Vector{Vector{Float64}})::Vector{Vector{Float64}}
     b = deepcopy(b₀) # preserve argument by working on a copy
     n = length(b)
 

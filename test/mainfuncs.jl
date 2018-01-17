@@ -1,5 +1,21 @@
 using Base.Test
 
+reload("RiemannTheta")
+
+Ω = [ im -0.5 ; -0.5 im ]
+zs = [Complex128[0.5, 0.]]
+
+res = RiemannTheta.riemanntheta(zs, Ω, 1e-3, Vector{Complex128}[], 5.)
+
+zs = [ Complex128[x, 2x] for x in -1:0.01:1 ]
+res = RiemannTheta.riemanntheta(zs, Ω, 1e-3, Vector{Complex128}[], 5.)
+
+pdat = [  @NT(x=el[1], y=real(el[2])) for el in zip(-1:0.01:1, res)]
+Voyager(pdat)
+
+
+################################################################################
+
 g, num_vectors = 5, 10
 z = [ rand(Complex128, g) for i in 1:num_vectors]
 mode, ϵ = 0, 1e-6

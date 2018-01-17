@@ -1,8 +1,8 @@
 module RiemannTheta
 
-include("lll_reduce.jl")
+include("lll.jl")
 include("radius.jl")
-include("integer_points.jl")
+include("innerpoints.jl")
 include("finite_sum.jl")
 include("riemann_theta.jl")
 

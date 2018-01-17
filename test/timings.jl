@@ -79,3 +79,21 @@ derivs = Vector{Complex128}[]
 derivs = [ rand(Complex128, 5) for i in 1:4 ]
 @btime finite_sum($X, $Yinv, $(Matrix(T)), $z, $S, $derivs) # 790ms / 800Mb
 @btime finite_sum($X, $Yinv, $T, $z, $S, $derivs) # 810ms / 800Mb
+
+
+
+#############################################################################
+
+Ω = [ im -0.5 ; -0.5 im ]
+zs1 = [Complex128[0.5, 0.]]
+@btime RiemannTheta.riemanntheta(zs1, Ω, 1e-3, Vector{Complex128}[], 5.)
+# 18.049 μs (249 allocations: 20.47 KiB)
+@btime RiemannTheta.riemanntheta(zs1, Ω, 1e-8, Vector{Complex128}[], 5.)
+# 28.715 μs (402 allocations: 35.14 KiB)
+
+
+zs2 = [ Complex128[x, 2x] for x in -1:0.01:1 ]
+@btime RiemannTheta.riemanntheta(zs2, Ω, 1e-3, Vector{Complex128}[], 5.)
+# 1.847 ms (25449 allocations: 2.38 MiB)
+@btime RiemannTheta.riemanntheta(zs2, Ω, 1e-8, Vector{Complex128}[], 5.)
+# 3.730 ms (51202 allocations: 4.79 MiB)

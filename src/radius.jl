@@ -8,6 +8,12 @@
 # * Theorem 3 of [CRTF] (no derivatives)
 # * A generalization of Theorems 5 and 7 of [CRTF] for N derivatives
 #
+# Original Authors
+# -------
+# * Chris Swierczewski (@cswiercz) - September 2012, July 2016
+# * Grady Williams (@gradyrw) - October 2012
+# * Jeremy Upsal (@jupsal) - July 2016
+#
 # References
 # ----------
 #
@@ -15,21 +21,19 @@
 #    Computing Riemann Theta Functions, Mathematics of Computation, 73, (2004),
 #    1417-1442.
 #
-# .. [DLMF] B. Deconinck, Digital Library of Mathematical Functions - Riemann
-#    Theta Functions, http://dlmf.nist.gov/21
-#
 ################################################################################
 
 using StatsFuns, Roots
 
+
 """
-    radius(epsilon::Float64,
+    radius(ϵ::Float64,
            T::Matrix{Float64},
            derivs::Vector{Vector{Float64}} = Vector{Float64}[],
            accuracy_radius::Float64 = 5.)
 
 Returns the primary radius of the bounding ellipsoid for computing the
-Riemann theta function up to accuracy `epsilon`.
+Riemann theta function up to accuracy `ϵ`.
 
 The derivative oscillatory part of the Riemann theta function has linear
 growth in :math:`z` along the directions of the columns of the Riemann
@@ -42,7 +46,7 @@ accurate Riemann theta for all
 
 Parameters
 ----------
-- epsilon : Requested accuracy.
+- ϵ : Requested accuracy.
 - T : A gxg matrix representing the Cholesky decomposition of the imaginary
     part of a Riemann matrix.
 - derivs : (Default: []) A list of directional derivatives. The number of
@@ -62,43 +66,31 @@ function radius(ϵ::Float64,
                 accuracy_radius::Float64 = 5.)
     g = size(T,1)
     # compute the LLL-reduction of T
-    U = lll_reduce(T)
-    r = minimum(mapslices(norm, U, 1))
+    U = lll([ T[:,i] for i in 1:size(T,2) ])
+    ρ = minimum(norm, U)
 
-    length(derivs) == 0 && return radius0(ϵ, r, g)
-
-    radiusN(ϵ, r, T, derivs, accuracy_radius)
+    if length(derivs) == 0
+        radius0(ϵ, ρ, g)
+    else
+        radiusN(ϵ, ρ, T, derivs, accuracy_radius)
+    end
 end
 
 """
-    radius0(eps::Float64, r::Float64, g::Int64)
+    radius0(eps::Float64, r::Float64, g::Int64)::Float64
 
 Compute the radius with no derivatives.
-
-Parameters
------------
-- eps : Requested accuracy.
-- r : The length of the shortest lattice vector in the LLL reduction of the
-    Cholesky decomposition of the imaginary part of the Riemann matrix.
-- g : The genus / problem size.
-
-Returns
--------
-- radius : The initial radius of the bounding ellipsoid used to truncate the
-    Riemann theta function to desired accuracy.
-
 """
-function radius0(ϵ::Float64, r::Float64, g::Int64)
-    lhs = ϵ * (2. / g) * (r / 2.)^g * gamma(g/2.)
-    ins = gammainvccdf(g / 2., 1.0, lhs )
-    R = sqrt(ins) + r / 2.
-    S = (sqrt(2g) + r) / 2.
-    max(R,S)
+function radius0(ϵ::Float64, ρ::Float64, g::Int64)::Float64
+    tmp = 2ϵ / g * (ρ / 2.)^g
+    tmp = gammainvccdf(g / 2., 1.0, tmp)
+    R = sqrt(tmp) + ρ / 2.
+    max(R, ( sqrt(2g) + ρ ) / 2)
 end
 
 
 """
-   radiusN(eps, r, T, derivs, accuracy_radius=5)
+   radiusN(eps, r, T, derivs, accuracy_radius=5)::Float64
 
 Compute the radius with N derivatives.
 
@@ -119,16 +111,16 @@ Returns
     Riemann theta function to desired accuracy.
 
 """
-function radiusN(ϵ::Float64, r::Float64,
+function radiusN(ϵ::Float64, ρ::Float64,
                  T::AbstractMatrix{Float64},
                  derivs::Vector{Vector{Complex128}},
-                 accuracy_radius::Float64 = 5.)
+                 accuracy_radius::Float64 = 5.)::Float64
 
     N, g = length(derivs), size(T,1)
     prodnormderiv = prod(norm, derivs)
     normTinv = vecnorm(inv(T))
 
-    lhs = ϵ * r ^ g * 2 ^ (1. - g - N) /
+    lhs = ϵ * ρ ^ g * 2 ^ (1. - g - N) /
           ( π ^ (N / 2) * g * normTinv ^ N * prodnormderiv )
 
     # define lower bound (guess) and attempt to solve for the radius
@@ -142,5 +134,5 @@ function radiusN(ϵ::Float64, r::Float64,
     end
     inszero = fzero(rhs, lbnd, 1e5)
 
-    max(sqrt(inszero) + r / 2.0, lbnd)
+    max(sqrt(inszero) + ρ / 2., lbnd)
 end
