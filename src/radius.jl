@@ -62,7 +62,7 @@ Returns
 """
 function radius(ϵ::Float64,
                 T::AbstractMatrix{Float64},
-                derivs::Vector{Vector{Complex128}} = Vector{Float64}[],
+                derivs::Vector{Vector{Complex128}} = Vector{Complex128}[],
                 accuracy_radius::Float64 = 5.)
     g = size(T,1)
     # compute the LLL-reduction of T
@@ -124,7 +124,7 @@ function radiusN(ϵ::Float64, ρ::Float64,
           ( π ^ (N / 2) * g * normTinv ^ N * prodnormderiv )
 
     # define lower bound (guess) and attempt to solve for the radius
-    lbnd = (sqrt(g + 2N + sqrt(g^2 + 8N)) + r) / 2.
+    lbnd = (sqrt(g + 2N + sqrt(g^2 + 8N)) + ρ) / 2.
     function rhs(ins::Float64)
         ai(k) = binomial(N,k) * π^(k/2.) *
                 (accuracy_radius * normTinv)^k *

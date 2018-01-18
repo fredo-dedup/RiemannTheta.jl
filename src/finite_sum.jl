@@ -70,8 +70,7 @@ function deriv_prod(n::Vector{Float64},
     #   Then it computes the product of the resulting complex scalars.
     total = Complex(1., 0.)
     for der in derivs
-        term = dot(der, nmintshift)
-        total *= conj(term)
+        total *= sum(der .* nmintshift)
     end
 
     # Compute (2*pi*i)^(nderivs) * (total_real + total_imag*i)

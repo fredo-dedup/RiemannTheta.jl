@@ -22,7 +22,7 @@ function innerpoints(T::Matrix{Float64}, radius::Float64)
     ns     = Vector{Float64}(n)
     points = Vector{Float64}[]
     function _innerpoints(Rₒ, c, g)
-        hw = (Rₒ + padding) / Tgg[g]
+        hw = Rₒ / Tgg[g]
         for ng in ceil(c[g]-hw):floor(c[g]+hw)
             ns[g] = ng
             if g == 1
@@ -36,7 +36,9 @@ function innerpoints(T::Matrix{Float64}, radius::Float64)
         end
     end
 
-    _innerpoints(radius / sqrt(π), zeros(n), n)
+    # add to initial R such that half-width 'hw' is augmented by 'padding'
+    padded_Rₒ = radius / sqrt(π) + padding * Tgg[n]
+    _innerpoints(padded_Rₒ, zeros(n), n)
 
     points
 end
