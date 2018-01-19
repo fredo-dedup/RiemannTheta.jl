@@ -77,11 +77,11 @@ function radius(ϵ::Float64,
 end
 
 """
-    radius0(eps::Float64, r::Float64, g::Int64)::Float64
+    radius0(eps::Float64, r::Float64, g::Int)::Float64
 
 Compute the radius with no derivatives.
 """
-function radius0(ϵ::Float64, ρ::Float64, g::Int64)::Float64
+function radius0(ϵ::Float64, ρ::Float64, g::Int)::Float64
     tmp = 2ϵ / g * (ρ / 2.)^g
     tmp = gammainvccdf(g / 2., 1.0, tmp)
     R = sqrt(tmp) + ρ / 2.
