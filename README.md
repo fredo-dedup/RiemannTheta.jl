@@ -2,10 +2,18 @@
 
 |Julia versions | master build | Coverage |
 |:-------------:|:------------:|:--------:|
-|[![RiemannTheta](http://pkg.julialang.org/badges/RiemannTheta_0.6.svg)](http://pkg.julialang.org/?pkg=RiemannTheta&ver=0.6) | [![Build Status](https://travis-ci.org/fredo-dedup/RiemannTheta.jl.svg?branch=master)](https://travis-ci.org/fredo-dedup/RiemannTheta.jl) [![Build status](https://ci.appveyor.com/api/projects/status/b9cmmaquuc08n6uc/branch/master?svg=true)](https://ci.appveyor.com/project/fredo-dedup/vegalite-jl/branch/master) | [![Coverage Status](https://coveralls.io/repos/github/fredo-dedup/RiemannTheta.jl/badge.svg?branch=master)](https://coveralls.io/github/fredo-dedup/RiemannTheta.jl?branch=master) |
+|[![RiemannTheta](http://pkg.julialang.org/badges/RiemannTheta_0.6.svg)](http://pkg.julialang.org/?pkg=RiemannTheta&ver=0.6) | [![Build Status](https://travis-ci.org/fredo-dedup/RiemannTheta.jl.svg?branch=master)](https://travis-ci.org/fredo-dedup/RiemannTheta.jl) [![Build status](https://ci.appveyor.com/api/projects/status/87uu6gk6dp6dr3q9/branch/master?svg=true)](https://ci.appveyor.com/project/fredo-dedup/riemanntheta-jl/branch/master) | [![Coverage Status](https://coveralls.io/repos/github/fredo-dedup/RiemannTheta.jl/badge.svg?branch=master)](https://coveralls.io/github/fredo-dedup/RiemannTheta.jl?branch=master) |
 
-Julia implementation of the Riemann Theta function. It is in a large part a port
-of the Sage library `Abelfunction` (https://github.com/abelfunctions/abelfunctions).
+Julia implementation of the Riemann Theta function. This package is mostly a port
+from Python of the same function in the Sage library `Abelfunction`
+(https://github.com/abelfunctions/abelfunctions).
+
+Itself an implementation of :
+
+
+> [CRTF] B. Deconinck, M.  Heil, A. Bobenko, M. van Hoeij and M. Schmies,
+> Computing Riemann Theta Functions, Mathematics of Computation, 73, (2004),
+> 1417-1442.
 
 Exported function are :
 
