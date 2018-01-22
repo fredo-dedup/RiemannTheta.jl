@@ -10,13 +10,15 @@
 #
 ###############################################################################
 
+using Distances
+
 ###############################################################################
 #  exppart
 #  -------
 #  A helper function for the finite sum functions. Computes
 #             2π < (n-intshift), (1/2)X(n-intshift) + x >
 ###############################################################################
-function exppart(n::Vector{Float64}, X::Matrix{Float64},
+@inline function exppart(n::Vector{Float64}, X::Matrix{Float64},
                  x::Vector{Float64}, intshift::Vector{Float64})::Float64
     tmp1 = n - intshift
     tmp2 = 0.5 * X * tmp1 + x
@@ -29,7 +31,7 @@ end
 # A helper function for the finite sum functions. Computes
 #            -pi * || T*(n+fracshift) ||^2
 ###############################################################################
-function normpart(n::Vector{Float64}, T::AbstractMatrix{Float64},
+@inline function normpart(n::Vector{Float64}, T::AbstractMatrix{Float64},
                   fracshift::Vector{Float64})::Float64
     tmp1 = n + fracshift
     tmp2 = T * tmp1
@@ -45,8 +47,7 @@ end
 
 Compute the real and imaginary parts of the product
          ___
-         | |    2π * I <d, n-intshift>
-               | |
+         | |    2π * I <d, n-intshift>    | |
            d in derivs
 for a given n in ZZ^g.
 
@@ -115,8 +116,24 @@ function finite_sum(X::Matrix{Float64},
                     S::Vector{Vector{Float64}},
                     derivs::Vector{Vector{Complex128}})
 
+    num_vectors, num_points, g = length(z), length(S), size(T,1)
+
+    if num_vectors * num_points * g > 4000 # TODO : improve this heuristic ?
+        finite_sum_large(X, Yinv, T, z, S, derivs)
+    else
+        finite_sum_small(X, Yinv, T, z, S, derivs)
+    end
+end
+
+function finite_sum_small(X::Matrix{Float64},
+                          Yinv::Matrix{Float64},
+                          T::AbstractMatrix{Float64},
+                          z::Vector{Vector{Complex128}},
+                          S::Vector{Vector{Float64}},
+                          derivs::Vector{Vector{Complex128}})
+
     num_vectors = length(z)
-    values = Vector{Complex128}(num_vectors)
+    values = zeros(Complex128, num_vectors)
 
     for kk in 1:num_vectors
         #   compute the shifted vectors: shift = Yinv*y as well as its integer and
@@ -124,15 +141,75 @@ function finite_sum(X::Matrix{Float64},
         shift = Yinv * imag(z[kk])
         intshift = round.(shift)
         fracshift = shift - intshift
+        rz = real(z[kk])
 
         # compute the finite sum
-        values[kk] = Complex(0., 0.)
         for s in S
-            zpt = Complex(normpart(s, T, fracshift),
-                          exppart(s, X, real(z[kk]), intshift) )
-            pt = exp(zpt)
-            dp = deriv_prod(s, intshift, derivs)
-            values[kk] += dp * pt
+            tmp1 = s - intshift
+            tmp2 = 0.5 * X * tmp1 + rz
+            ep = 2π * dot(tmp1, tmp2) # π omitted since sinpi / cospi is used
+
+            tmp1 = s + fracshift
+            tmp2 = T * tmp1
+            np = -π * dot(tmp2, tmp2)
+
+            pt = exp(np) * cis(ep)
+
+            if length(derivs) == 0
+                values[kk] += pt
+            else
+                values[kk] += deriv_prod(s, intshift, derivs) * pt
+            end
+        end
+    end
+    values
+end
+
+# use matrix operations as much as possible
+function finite_sum_large(X::Matrix{Float64},
+                          Yinv::Matrix{Float64},
+                          T::AbstractMatrix{Float64},
+                          z::Vector{Vector{Complex128}},
+                          S::Vector{Vector{Float64}},
+                          derivs::Vector{Vector{Complex128}})
+
+    num_vectors, num_points, g = length(z), length(S), size(T,1)
+
+    Z = reshape(vcat(z...), g, num_vectors)
+    Smat = reshape(vcat(S...), g, num_points)
+
+    RealZ = real.(Z)
+    tmp = Yinv * imag.(Z)
+    IS = round.(tmp)
+    FS = tmp .- IS
+    TF = T * FS
+    TF2 = sum(TF .* TF, 1)
+
+    ### exponential part
+    XIS = X * IS
+    XS  = X * Smat
+    EP = Smat' * RealZ .- sum(RealZ .* IS, 1) .+
+         0.5 * ( sum(Smat .* XS, 1)'  .+
+                 sum(IS .* XIS, 1) .-
+                 Smat' * XIS .- XS' * IS)
+    EP = 2π .* EP
+
+    ### normal part
+    TS  = T * Smat
+    TS2 = sum(TS .* TS, 1)'
+    TSTF = TS' * TF
+    NP = exp.( -π .* ( TS2 .+ TF2 .+ 2. * TSTF ) )
+
+    if length(derivs) == 0
+        values = vec(sum( NP .* cis.(EP), 1 ))
+    else
+        values = zeros(Complex128, num_vectors)
+        PT = NP .* cis.(EP)
+        for iv in 1:num_vectors
+            for ip in 1:num_points
+                dp = deriv_prod(S[ip], IS[:,iv], derivs)
+                values[iv] += PT[ip,iv] * dp
+            end
         end
     end
     values
