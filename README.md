@@ -6,11 +6,11 @@
 
 Julia implementation of the Riemann Theta function. This package is mostly a port
 from Python of the same function in the Sage library `Abelfunction`
-(https://github.com/abelfunctions/abelfunctions). Beyond a given problem size(number of z 
+(https://github.com/abelfunctions/abelfunctions). Beyond a given problem size (number of z 
 in zs, dimension of z's, number of integration  points), the functions switch to a different algorithm
 using matrix operations resulting in very competitive timings (at the cost of memory usage).
 
-Itself an implementation of :
+The Sage library is itself an implementation of :
 
 
 > [CRTF] B. Deconinck, M.  Heil, A. Bobenko, M. van Hoeij and M. Schmies,
