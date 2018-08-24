@@ -10,9 +10,9 @@
 #
 ################################################################################
 
-function innerpoints(T::Matrix{Float64}, radius::Float64)
-    const padding = 0.5 # necessary for uniform approximation (page 1428)
+const padding = 0.5 # necessary for uniform approximation (page 1428)
 
+function innerpoints(T::Matrix{Float64}, radius::Float64)
     n   = size(T, 1) # problem size
 
     # precalculate what is independent of points

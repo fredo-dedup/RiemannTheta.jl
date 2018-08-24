@@ -23,8 +23,6 @@
 #
 ################################################################################
 
-using StatsFuns, Roots
-
 
 """
     radius(ϵ::Float64,
@@ -62,7 +60,7 @@ Returns
 """
 function radius(ϵ::Float64,
                 T::AbstractMatrix{Float64},
-                derivs::Vector{Vector{Complex128}} = Vector{Complex128}[],
+                derivs::Vector{Vector{ComplexF64}} = Vector{ComplexF64}[],
                 accuracy_radius::Float64 = 5.)
     g = size(T,1)
     # compute the LLL-reduction of T
@@ -113,12 +111,12 @@ Returns
 """
 function radiusN(ϵ::Float64, ρ::Float64,
                  T::AbstractMatrix{Float64},
-                 derivs::Vector{Vector{Complex128}},
+                 derivs::Vector{Vector{ComplexF64}},
                  accuracy_radius::Float64 = 5.)::Float64
 
     N, g = length(derivs), size(T,1)
     prodnormderiv = prod(norm, derivs)
-    normTinv = vecnorm(inv(T))
+    normTinv = norm(inv(T))
 
     lhs = ϵ * ρ ^ g * 2 ^ (1. - g - N) /
           ( π ^ (N / 2) * g * normTinv ^ N * prodnormderiv )

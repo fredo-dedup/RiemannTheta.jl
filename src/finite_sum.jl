@@ -10,8 +10,6 @@
 #
 ###############################################################################
 
-using Distances
-
 ###############################################################################
 #  exppart
 #  -------
@@ -43,7 +41,7 @@ end
 """
       deriv_prod(n::Vector{Float64},
                  intshift::Vector{Float64},
-                 derivs::Vector{Vector{Complex128}})::Complex128
+                 derivs::Vector{Vector{ComplexF64}})::ComplexF64
 
 Compute the real and imaginary parts of the product
          ___
@@ -63,7 +61,7 @@ Returns
 """
 function deriv_prod(n::Vector{Float64},
                     intshift::Vector{Float64},
-                    derivs::Vector{Vector{Complex128}})::Complex128
+                    derivs::Vector{Vector{ComplexF64}})::ComplexF64
     # compute n-intshift
     nmintshift = n - intshift
 
@@ -91,9 +89,9 @@ end
     function finite_sum(X::Matrix{Float64},
                         Yinv::Matrix{Float64},
                         T::Matrix{Float64},
-                        z::Vector{Vector{Complex128}},
+                        z::Vector{Vector{ComplexF64}},
                         S::Vector{Vector{Float64}},
-                        derivs::Vector{Vector{Complex128}})
+                        derivs::Vector{Vector{ComplexF64}})
 
 Computes the real and imaginary parts of the finite sum with derivatives.
 
@@ -112,9 +110,9 @@ Returns
 function finite_sum(X::Matrix{Float64},
                     Yinv::Matrix{Float64},
                     T::AbstractMatrix{Float64},
-                    z::Vector{Vector{Complex128}},
+                    z::Vector{Vector{ComplexF64}},
                     S::Vector{Vector{Float64}},
-                    derivs::Vector{Vector{Complex128}})
+                    derivs::Vector{Vector{ComplexF64}})
 
     num_vectors, num_points, g = length(z), length(S), size(T,1)
 
@@ -128,12 +126,12 @@ end
 function finite_sum_small(X::Matrix{Float64},
                           Yinv::Matrix{Float64},
                           T::AbstractMatrix{Float64},
-                          z::Vector{Vector{Complex128}},
+                          z::Vector{Vector{ComplexF64}},
                           S::Vector{Vector{Float64}},
-                          derivs::Vector{Vector{Complex128}})
+                          derivs::Vector{Vector{ComplexF64}})
 
     num_vectors = length(z)
-    values = zeros(Complex128, num_vectors)
+    values = zeros(ComplexF64, num_vectors)
 
     for kk in 1:num_vectors
         #   compute the shifted vectors: shift = Yinv*y as well as its integer and
@@ -169,9 +167,9 @@ end
 function finite_sum_large(X::Matrix{Float64},
                           Yinv::Matrix{Float64},
                           T::AbstractMatrix{Float64},
-                          z::Vector{Vector{Complex128}},
+                          z::Vector{Vector{ComplexF64}},
                           S::Vector{Vector{Float64}},
-                          derivs::Vector{Vector{Complex128}})
+                          derivs::Vector{Vector{ComplexF64}})
 
     num_vectors, num_points, g = length(z), length(S), size(T,1)
 
@@ -203,7 +201,7 @@ function finite_sum_large(X::Matrix{Float64},
     if length(derivs) == 0
         values = vec(sum( NP .* cis.(EP), 1 ))
     else
-        values = zeros(Complex128, num_vectors)
+        values = zeros(ComplexF64, num_vectors)
         PT = NP .* cis.(EP)
         for iv in 1:num_vectors
             for ip in 1:num_points
