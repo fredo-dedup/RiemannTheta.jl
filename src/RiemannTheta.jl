@@ -1,5 +1,10 @@
 module RiemannTheta
 
+using LinearAlgebra
+using StatsFuns, Roots
+using Distances
+using SpecialFunctions
+
 include("lll.jl")
 include("radius.jl")
 include("innerpoints.jl")

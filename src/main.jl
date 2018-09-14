@@ -34,11 +34,11 @@
 ###############################################################################
 
 """
-         oscillatory_part(zs::Vector{Vector{Complex128}},
-                          Ω::Matrix{Complex128};
+         oscillatory_part(zs::Vector{Vector{ComplexF64}},
+                          Ω::Matrix{ComplexF64};
                           eps::Float64=1e-8,
-                          derivs::Vector{Vector{Complex128}}=Vector{Complex128}[],
-                          accuracy_radius::Float64=5.)::Vector{Complex128}
+                          derivs::Vector{Vector{ComplexF64}}=Vector{ComplexF64}[],
+                          accuracy_radius::Float64=5.)::Vector{ComplexF64}
 
 Return the value of the oscillatory part of the Riemann theta function for Ω and
 all z in `zs` if `derivs` is empty, or the derivatives at all z in `zs` for the
@@ -58,10 +58,10 @@ Returns
 -------
 - The value of the oscillatory part of the Riemann theta function at each point appearing in `z`.
 """
-function oscillatory_part(zs::Vector{Vector{Complex128}},
-                          Ω::Matrix{Complex128};
+function oscillatory_part(zs::Vector{Vector{ComplexF64}},
+                          Ω::Matrix{ComplexF64};
                           eps::Float64=1e-8,
-                          derivs::Vector{Vector{Complex128}}=Vector{Complex128}[],
+                          derivs::Vector{Vector{ComplexF64}}=Vector{ComplexF64}[],
                           accuracy_radius::Float64=5.)
     # extract the requested information: the real part, inverse of the
     # imaginary part, and the cholesky decomposition of the imaginary part
@@ -85,8 +85,8 @@ end
 
 
 """
-         exponential_part(zs::Vector{Vector{Complex128}},
-                          Ω::Matrix{Complex128})::Vector{Float64}
+         exponential_part(zs::Vector{Vector{ComplexF64}},
+                          Ω::Matrix{ComplexF64})::Vector{Float64}
 
 Return the value of the exponential part of the Riemann theta function for Ω and
 all z in `zs`.
@@ -102,8 +102,8 @@ The value of the exponential part of the Riemann theta function at
 each point appearing in `zs`.
 
 """
-function exponential_part(zs::Vector{Vector{Complex128}},
-                          Ω::Matrix{Complex128})::Vector{Float64}
+function exponential_part(zs::Vector{Vector{ComplexF64}},
+                          Ω::Matrix{ComplexF64})::Vector{Float64}
     # extract the imaginary parts of z and the inverse of the imaginary part
     # of Omega
     y = [ imag.(z) for z in zs ]
@@ -115,11 +115,11 @@ end
 
 
 """
-     riemanntheta(zs::Vector{Vector{Complex128}},
-                  Ω::Matrix{Complex128};
+     riemanntheta(zs::Vector{Vector{ComplexF64}},
+                  Ω::Matrix{ComplexF64};
                   eps::Float64=1e-8,
-                  derivs::Vector{Vector{Complex128}}=Vector{Complex128}[],
-                  accuracy_radius::Float64=5.)::Vector{Complex128}
+                  derivs::Vector{Vector{ComplexF64}}=Vector{ComplexF64}[],
+                  accuracy_radius::Float64=5.)::Vector{ComplexF64}
 
 Return the value of the Riemann theta function for Ω and all z in `zs` if
 `derivs` is empty, or the derivatives at all z in `zs` for the given directional
@@ -139,11 +139,11 @@ Returns
 -------
 The value (or derivative) of the Riemann theta function at each point in `zs`.
 """
-function riemanntheta(zs::Vector{Vector{Complex128}},
-                      Ω::Matrix{Complex128};
+function riemanntheta(zs::Vector{Vector{ComplexF64}},
+                      Ω::Matrix{ComplexF64};
                       eps::Float64=1e-8,
-                      derivs::Vector{Vector{Complex128}}=Vector{Complex128}[],
-                      accuracy_radius::Float64=5.)::Vector{Complex128}
+                      derivs::Vector{Vector{ComplexF64}}=Vector{ComplexF64}[],
+                      accuracy_radius::Float64=5.)::Vector{ComplexF64}
 
     u = exponential_part(zs, Ω)
     v = oscillatory_part(zs, Ω, eps=eps, derivs=derivs,

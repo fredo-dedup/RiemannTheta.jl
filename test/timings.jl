@@ -16,8 +16,8 @@ tmp = 5*rand(10,10) - 2.5
 Ω3 = 5*rand(10,10) - 2.5 + (tmp * tmp') * im
 T3 = Matrix(chol(imag.(Ω3)))
 
-derivs1 = [ rand(Complex128, 2) for i in 1:1 ]
-derivs2 = [ rand(Complex128, 10) for i in 1:5 ]
+derivs1 = [ rand(ComplexF64, 2) for i in 1:1 ]
+derivs2 = [ rand(ComplexF64, 10) for i in 1:5 ]
 
 ϵ1, ϵ2 = 1e-3, 1e-8
 
@@ -41,17 +41,17 @@ R = radius(ϵ2, T3)
 
 ##########   riemanntheta function     ###########
 
-zs1 = [Complex128[0.5, 0.]]
+zs1 = [ComplexF64[0.5, 0.]]
 @btime riemanntheta(zs1, Ω1, eps=ϵ1) # 50.512 μs (269 allocations: 24.03 KiB)
 @btime riemanntheta(zs1, Ω1, eps=ϵ2) # 58.536 μs (390 allocations: 35.91 KiB)
 
-R = RiemannTheta.radius(ϵ1, Matrix(chol(imag.(Ω1))), Vector{Complex128}[], 5.)
+R = RiemannTheta.radius(ϵ1, Matrix(chol(imag.(Ω1))), Vector{ComplexF64}[], 5.)
 RiemannTheta.innerpoints(Matrix(chol(imag.(Ω1))), R)
-R = RiemannTheta.radius(ϵ2, Matrix(chol(imag.(Ω1))), Vector{Complex128}[], 5.)
+R = RiemannTheta.radius(ϵ2, Matrix(chol(imag.(Ω1))), Vector{ComplexF64}[], 5.)
 RiemannTheta.innerpoints(Matrix(chol(imag.(Ω1))), R)
 
 
-zs2 = [ Complex128[x, 2x] for x in -1:0.01:1 ]
+zs2 = [ ComplexF64[x, 2x] for x in -1:0.01:1 ]
 @btime riemanntheta(zs2, Ω1, eps=ϵ1) # 608.379 μs (1097 allocations: 487.64 KiB)
 @btime riemanntheta(zs2, Ω1, eps=ϵ2) # 930.824 μs (1122 allocations: 793.72 KiB)
 
@@ -60,13 +60,13 @@ zs2 = [ Complex128[x, 2x] for x in -1:0.01:1 ]
 
 
 srand(0)
-zs3 = [ rand(Complex128, 10) for i in 1:20 ]
+zs3 = [ rand(ComplexF64, 10) for i in 1:20 ]
 @btime riemanntheta(zs3, Ω3, eps=ϵ1) # 1.095 ms (8566 allocations: 852.06 KiB)
 @btime riemanntheta(zs3, Ω3, eps=ϵ2) # 1.921 ms (12017 allocations: 1.08 MiB)
 
-R = RiemannTheta.radius(ϵ1, Matrix(chol(imag.(Ω3))), Vector{Complex128}[], 5.)
+R = RiemannTheta.radius(ϵ1, Matrix(chol(imag.(Ω3))), Vector{ComplexF64}[], 5.)
 RiemannTheta.innerpoints(Matrix(chol(imag.(Ω3))), R)
-R = RiemannTheta.radius(ϵ2, Matrix(chol(imag.(Ω3))), Vector{Complex128}[], 5.)
+R = RiemannTheta.radius(ϵ2, Matrix(chol(imag.(Ω3))), Vector{ComplexF64}[], 5.)
 RiemannTheta.innerpoints(Matrix(chol(imag.(Ω3))), R)
 
 
@@ -78,7 +78,7 @@ RiemannTheta.innerpoints(Matrix(chol(imag.(Ω3))), R)
 # comparable to openRT timings ?
 # openRT at 90 ms
 srand(0)
-zs4 = [ Complex128[Complex(rand(),0.), Complex(rand(),0.)] for i in 1:10000 ]
+zs4 = [ ComplexF64[Complex(rand(),0.), Complex(rand(),0.)] for i in 1:10000 ]
 Ω4 = [ 3im 0. ; 0. 2im ]
 @btime riemanntheta(zs4, Ω4, eps=1e-8) #  22.784 ms (20724 allocations: 20.02 MiB)
 

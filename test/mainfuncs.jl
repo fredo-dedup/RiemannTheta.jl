@@ -7,14 +7,14 @@
     # https://reference.wolfram.com/language/ref/SiegelTheta.html
 
     Ω = [ im -0.5 ; -0.5 im ]
-    zs = [Complex128[0.5, 0.]]
+    zs = [ComplexF64[0.5, 0.]]
 
     res = riemanntheta(zs, Ω)
 
     @test real(res[1]) ≈ 1.00748
     @test imag(res[1]) ≈ 0.
 
-    zs = [ Complex128[x, 2x] for x in -1:0.1:1 ]
+    zs = [ ComplexF64[x, 2x] for x in -1:0.1:1 ]
     res = riemanntheta(zs, Ω, eps=1e-3)
 
     @test maximum(real, res) ≈ 1.165
@@ -41,14 +41,14 @@ end
     # https://reference.wolfram.com/language/ref/SiegelTheta.html
 
     Ω = [ im -0.5 ; -0.5 im ]
-    zs = fill(Complex128[0.5, 0.], 10000)
+    zs = fill(ComplexF64[0.5, 0.], 10000)
 
     res = riemanntheta(zs, Ω)
 
     @test real(res[1]) ≈ 1.00748
     @test imag(res[1]) ≈ 0.
 
-    zs = repeat( [ Complex128[x, 2x] for x in -1:0.01:1 ], outer=100)
+    zs = repeat( [ ComplexF64[x, 2x] for x in -1:0.01:1 ], outer=100)
     res = riemanntheta(zs, Ω, eps=1e-3)
 
     @test maximum(real, res) ≈ 1.165
@@ -75,11 +75,11 @@ g = 3
 δ = 1e-8
 srand(0)
 tmp = (rand()*10 - 5.) * rand(g,g) ; Ω = Complex.(rand(g, g), tmp*tmp')
-z₀ = (rand()*10 - 5.) * rand(Complex128, g)
+z₀ = (rand()*10 - 5.) * rand(ComplexF64, g)
 
 @testset "oscillatory_part derivs are correct (small)" begin
 
-    circvec = [Complex(1.,0.); zeros(Complex128, g-1)]
+    circvec = [Complex(1.,0.); zeros(ComplexF64, g-1)]
 
     # calculate function at slightly shifted z₀
     z = [[z₀] ; [z₀ + circshift(δ * circvec, i) for i in 0:g-1]]
@@ -99,7 +99,7 @@ end
 
 @testset "oscillatory_part derivs are correct (large)" begin
 
-    circvec = [Complex(1.,0.); zeros(Complex128, g-1)]
+    circvec = [Complex(1.,0.); zeros(ComplexF64, g-1)]
 
     # calculate function at slightly shifted z₀
     z = [[z₀] ; [z₀ + circshift(δ * circvec, i) for i in 0:g-1]]
@@ -118,7 +118,7 @@ end
 
 @testset "riemanntheta derivs are correct" begin
 
-    circvec = [Complex(1.,0.); zeros(Complex128, g-1)]
+    circvec = [Complex(1.,0.); zeros(ComplexF64, g-1)]
 
     # calculate function at slightly shifted z₀
     z = [[z₀] ; [z₀ + circshift(δ * circvec, i) for i in 0:g-1]]
