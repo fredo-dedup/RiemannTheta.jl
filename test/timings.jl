@@ -6,15 +6,15 @@ using Distances
 
 Ω1 = [ 1.690983006 + 0.9510565162im 1.5+0.363271264im ;
       1.5+0.363271264im 1.309016994+0.9510565162im ]
-T1 = Matrix(chol(imag.(Ω1)))
+T1 = Matrix(cholesky(imag.(Ω1)))
 
 Ω2 = -1/(2π * im) * [ 111.207 96.616 ; 96.616 83.943 ]
-T2 = Matrix(chol(imag.(Ω2)))
+T2 = Matrix(cholesky(imag.(Ω2)))
 
 srand(0)
 tmp = 5*rand(10,10) - 2.5
 Ω3 = 5*rand(10,10) - 2.5 + (tmp * tmp') * im
-T3 = Matrix(chol(imag.(Ω3)))
+T3 = Matrix(cholesky(imag.(Ω3)))
 
 derivs1 = [ rand(ComplexF64, 2) for i in 1:1 ]
 derivs2 = [ rand(ComplexF64, 10) for i in 1:5 ]
@@ -45,10 +45,10 @@ zs1 = [ComplexF64[0.5, 0.]]
 @btime riemanntheta(zs1, Ω1, eps=ϵ1) # 50.512 μs (269 allocations: 24.03 KiB)
 @btime riemanntheta(zs1, Ω1, eps=ϵ2) # 58.536 μs (390 allocations: 35.91 KiB)
 
-R = RiemannTheta.radius(ϵ1, Matrix(chol(imag.(Ω1))), Vector{ComplexF64}[], 5.)
-RiemannTheta.innerpoints(Matrix(chol(imag.(Ω1))), R)
-R = RiemannTheta.radius(ϵ2, Matrix(chol(imag.(Ω1))), Vector{ComplexF64}[], 5.)
-RiemannTheta.innerpoints(Matrix(chol(imag.(Ω1))), R)
+R = RiemannTheta.radius(ϵ1, Matrix(cholesky(imag.(Ω1))), Vector{ComplexF64}[], 5.)
+RiemannTheta.innerpoints(Matrix(cholesky(imag.(Ω1))), R)
+R = RiemannTheta.radius(ϵ2, Matrix(cholesky(imag.(Ω1))), Vector{ComplexF64}[], 5.)
+RiemannTheta.innerpoints(Matrix(cholesky(imag.(Ω1))), R)
 
 
 zs2 = [ ComplexF64[x, 2x] for x in -1:0.01:1 ]
@@ -64,10 +64,10 @@ zs3 = [ rand(ComplexF64, 10) for i in 1:20 ]
 @btime riemanntheta(zs3, Ω3, eps=ϵ1) # 1.095 ms (8566 allocations: 852.06 KiB)
 @btime riemanntheta(zs3, Ω3, eps=ϵ2) # 1.921 ms (12017 allocations: 1.08 MiB)
 
-R = RiemannTheta.radius(ϵ1, Matrix(chol(imag.(Ω3))), Vector{ComplexF64}[], 5.)
-RiemannTheta.innerpoints(Matrix(chol(imag.(Ω3))), R)
-R = RiemannTheta.radius(ϵ2, Matrix(chol(imag.(Ω3))), Vector{ComplexF64}[], 5.)
-RiemannTheta.innerpoints(Matrix(chol(imag.(Ω3))), R)
+R = RiemannTheta.radius(ϵ1, Matrix(cholesky(imag.(Ω3))), Vector{ComplexF64}[], 5.)
+RiemannTheta.innerpoints(Matrix(cholesky(imag.(Ω3))), R)
+R = RiemannTheta.radius(ϵ2, Matrix(cholesky(imag.(Ω3))), Vector{ComplexF64}[], 5.)
+RiemannTheta.innerpoints(Matrix(cholesky(imag.(Ω3))), R)
 
 
 

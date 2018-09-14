@@ -115,7 +115,7 @@ function radiusN(ϵ::Float64, ρ::Float64,
 
     N, g = length(derivs), size(T,1)
     prodnormderiv = prod(norm, derivs)
-    normTinv = vecnorm(inv(T))
+    normTinv = norm(inv(T))
 
     lhs = ϵ * ρ ^ g * 2 ^ (1. - g - N) /
           ( π ^ (N / 2) * g * normTinv ^ N * prodnormderiv )

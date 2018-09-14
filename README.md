@@ -2,11 +2,11 @@
 
 |Julia versions | master build | Coverage |
 |:-------------:|:------------:|:--------:|
-|[![RiemannTheta](http://pkg.julialang.org/badges/RiemannTheta_0.6.svg)](http://pkg.julialang.org/?pkg=RiemannTheta&ver=0.6) | [![Build Status](https://travis-ci.org/fredo-dedup/RiemannTheta.jl.svg?branch=master)](https://travis-ci.org/fredo-dedup/RiemannTheta.jl) [![Build status](https://ci.appveyor.com/api/projects/status/87uu6gk6dp6dr3q9/branch/master?svg=true)](https://ci.appveyor.com/project/fredo-dedup/riemanntheta-jl/branch/master) | [![Coverage Status](https://coveralls.io/repos/github/fredo-dedup/RiemannTheta.jl/badge.svg?branch=master)](https://coveralls.io/github/fredo-dedup/RiemannTheta.jl?branch=master) |
+|[![RiemannTheta](http://pkg.julialang.org/badges/RiemannTheta_0.7.svg)](http://pkg.julialang.org/?pkg=RiemannTheta&ver=0.7) [![RiemannTheta](http://pkg.julialang.org/badges/RiemannTheta_1.0.svg)](http://pkg.julialang.org/?pkg=RiemannTheta&ver=1.0)  | [![Build Status](https://travis-ci.org/fredo-dedup/RiemannTheta.jl.svg?branch=master)](https://travis-ci.org/fredo-dedup/RiemannTheta.jl) [![Build status](https://ci.appveyor.com/api/projects/status/87uu6gk6dp6dr3q9/branch/master?svg=true)](https://ci.appveyor.com/project/fredo-dedup/riemanntheta-jl/branch/master) | [![Coverage Status](https://coveralls.io/repos/github/fredo-dedup/RiemannTheta.jl/badge.svg?branch=master)](https://coveralls.io/github/fredo-dedup/RiemannTheta.jl?branch=master) |
 
 Julia implementation of the Riemann Theta function. This package is mostly a port
 from Python of the same function in the Sage library `Abelfunction`
-(https://github.com/abelfunctions/abelfunctions). Beyond a given problem size (number of z 
+(https://github.com/abelfunctions/abelfunctions). Beyond a given problem size (number of z
 in zs, dimension of z's, number of integration  points), the functions switch to a different algorithm
 using matrix operations resulting in very competitive timings (at the cost of memory usage).
 

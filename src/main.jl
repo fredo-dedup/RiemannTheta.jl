@@ -69,9 +69,9 @@ function oscillatory_part(zs::Vector{Vector{ComplexF64}},
     Y = imag.(Ω)
 
     # In python version numpy.linalg.cholesky returns the lower triangular
-    #  matrix, which is then transposed. Julia's chol returns the upper
+    #  matrix, which is then transposed. Julia's cholesky returns the upper
     #  triangular matrix, hence no need to transpose.
-    T = Matrix(chol(Y))
+    T = Matrix(cholesky(Y))
 
     Yinv = inv(Y)
 
