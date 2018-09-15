@@ -1,4 +1,4 @@
-≈(a,b) = isapprox(a, b, rtol=1e-3, atol=1e-8)
+≈(a::Number,b::Number) = isapprox(a, b, rtol=1e-3, atol=1e-8)
 
 # with small calculations, such that the finite_sum_small branch is used
 @testset "values of riemanntheta (small)" begin
@@ -73,7 +73,7 @@ end
 
 g = 3
 δ = 1e-8
-srand(0)
+Random.seed!(0)
 tmp = (rand()*10 - 5.) * rand(g,g) ; Ω = Complex.(rand(g, g), tmp*tmp')
 z₀ = (rand()*10 - 5.) * rand(ComplexF64, g)
 

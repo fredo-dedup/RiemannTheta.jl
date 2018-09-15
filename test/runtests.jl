@@ -12,8 +12,8 @@ T1 = Matrix(cholesky(imag.(Ω1)).U)
 T2 = Matrix(cholesky(imag.(Ω2)).U)
 
 Random.seed!(0)
-tmp = 5*rand(10,10) - 2.5
-Ω3 = 5*rand(10,10) - 2.5 + (tmp * tmp') * im
+tmp = 5*rand(10,10) .- 2.5
+Ω3 = 5*rand(10,10) .- 2.5 + (tmp * tmp') * im
 T3 = Matrix(cholesky(imag.(Ω3)).U)
 
 derivs1 = [ rand(ComplexF64, 2) for i in 1:1 ]

@@ -181,25 +181,25 @@ function finite_sum_large(X::Matrix{Float64},
     IS = round.(tmp)
     FS = tmp .- IS
     TF = T * FS
-    TF2 = sum(TF .* TF, 1)
+    TF2 = sum(TF .* TF, dims=1)
 
     ### exponential part
     XIS = X * IS
     XS  = X * Smat
-    EP = Smat' * RealZ .- sum(RealZ .* IS, 1) .+
-         0.5 * ( sum(Smat .* XS, 1)'  .+
-                 sum(IS .* XIS, 1) .-
+    EP = Smat' * RealZ .- sum(RealZ .* IS, dims=1) .+
+         0.5 * ( sum(Smat .* XS, dims=1)'  .+
+                 sum(IS .* XIS, dims=1) .-
                  Smat' * XIS .- XS' * IS)
     EP = 2π .* EP
 
     ### normal part
     TS  = T * Smat
-    TS2 = sum(TS .* TS, 1)'
+    TS2 = sum(TS .* TS, dims=1)'
     TSTF = TS' * TF
     NP = exp.( -π .* ( TS2 .+ TF2 .+ 2. * TSTF ) )
 
     if length(derivs) == 0
-        values = vec(sum( NP .* cis.(EP), 1 ))
+        values = vec(sum( NP .* cis.(EP), dims=1))
     else
         values = zeros(ComplexF64, num_vectors)
         PT = NP .* cis.(EP)

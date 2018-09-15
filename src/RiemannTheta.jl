@@ -1,7 +1,8 @@
 module RiemannTheta
 
 using LinearAlgebra
-using StatsFuns, Roots
+using StatsFuns
+using Roots
 using Distances
 using SpecialFunctions
 

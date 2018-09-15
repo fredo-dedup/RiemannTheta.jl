@@ -19,7 +19,7 @@ function innerpoints(T::Matrix{Float64}, radius::Float64)
     δcs = [ inv(T[1:i-1,1:i-1]) * T[1:i-1,i] for i in 1:n ]
     Tgg = diag(T)
 
-    ns     = Vector{Float64}(n)
+    ns     = Vector{Float64}(undef, n)
     points = Vector{Float64}[]
     function _innerpoints(Rₒ, c, g)
         hw = Rₒ / Tgg[g]
